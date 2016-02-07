@@ -15,7 +15,7 @@ require "rails/test_unit/railtie"
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
-
+Dotenv::Railtie.load
 module LibraryMinerWebBackend
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -26,5 +26,9 @@ module LibraryMinerWebBackend
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+    config.time_zone = 'Tokyo'
+    config.i18n.default_locale = :ja
+    config.i18n.available_locales = [:ja, :en]
+    config.autoload_paths += Dir["#{config.root}/lib"]
   end
 end
