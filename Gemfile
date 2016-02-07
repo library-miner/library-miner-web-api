@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 gem 'rails', '>= 5.0.0.beta2', '< 5.1'
 gem 'mysql2', '0.3.19'
-gem 'puma'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.0'
 # Action Cable dependencies for the Redis adapter
@@ -11,6 +10,7 @@ gem 'redis', '~> 3.0'
 # gem 'bcrypt', '~> 3.1.7'
 
 gem 'active_hash'
+gem 'convergence'
 gem 'rubocop'
 
 #環境設定
