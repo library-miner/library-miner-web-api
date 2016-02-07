@@ -12,6 +12,7 @@ gem 'redis', '~> 3.0'
 gem 'active_hash'
 gem 'convergence'
 gem 'rubocop'
+gem 'faraday'
 
 #環境設定
 gem 'dotenv-rails'
