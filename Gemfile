@@ -13,6 +13,7 @@ gem 'active_hash'
 gem 'convergence'
 gem 'rubocop'
 gem 'faraday'
+gem 'rails-i18n'
 
 #環境設定
 gem 'dotenv-rails'
