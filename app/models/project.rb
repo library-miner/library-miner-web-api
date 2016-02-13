@@ -46,4 +46,9 @@ class Project < ApplicationRecord
     where(is_incomplete: false)
   end
 
+  # 新着プロジェクト一覧
+  # プロジェクト情報は完全なもののみ表示する
+  def self.new_projects
+    Project.completed.limit(10).order(github_updated_at: :desc)
+  end
 end

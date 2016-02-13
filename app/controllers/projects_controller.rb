@@ -39,6 +39,14 @@ class ProjectsController < ApplicationController
     render json: @projects
   end
 
+  # GET /projects/new_projects
+  # 新着プロジェクト情報
+  def new_projects
+    @projects = Project.new_projects
+
+    render json: @projects
+  end
+
   # GET /projects/1
   def show
     render json: @project
