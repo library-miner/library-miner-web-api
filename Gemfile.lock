@@ -33,6 +33,8 @@ GEM
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
     active_hash (1.4.1)
       activesupport (>= 2.2.2)
+    active_model_serializers (0.9.4)
+      activemodel (>= 3.2)
     activejob (5.0.0.beta2)
       activesupport (= 5.0.0.beta2)
       globalid (>= 0.3.6)
@@ -238,6 +240,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_hash
+  active_model_serializers
   annotate
   better_errors
   binding_of_caller
