@@ -14,10 +14,10 @@ class MinerClient
 
   # Miner より データ取得
   def import_project(page: 1)
-    path = "#{MINER_PROJECT_EXPORT_URL}?page=#{page}"
+    path = "#{MINER_PROJECT_EXPORT_URL}"
     Rails.logger.info("MinerClient Access to #{path} - project import page:" + page.to_s)
 
-    MinerProjectResponse.parse(get_request_to(path))
+    MinerProjectResponse.parse(get_request_to(path, page: page))
   end
 
   # Miner に Web連携完了通知
