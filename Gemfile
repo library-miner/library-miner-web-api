@@ -18,6 +18,8 @@ gem 'active_model_serializers'
 
 #環境設定
 gem 'dotenv-rails'
+#クロスドメイン
+gem 'rack-cors', :require => 'rack/cors'
 
 group :development, :test do
   gem 'pry'
