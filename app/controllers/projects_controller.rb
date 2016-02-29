@@ -47,6 +47,16 @@ class ProjectsController < ApplicationController
     render json: @projects
   end
 
+  # GET /project/search
+  def search
+    @project = Search::Project.new(search_params)
+    @projects = @project
+      .matches
+      .order(stargazers_count: :desc, github_updated_at: :desc)
+
+    render json: @projects
+  end
+
   # GET /projects/1
   def show
     render json: @project
@@ -86,5 +96,11 @@ class ProjectsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def project_params
       params.fetch(:project, {})
+    end
+
+    def search_params
+      params
+        .require(:search_project)
+        .permit(Search::Project::ATTRIBUTES)
     end
 end
