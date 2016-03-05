@@ -1,0 +1,31 @@
+development:
+  adapter: mysql2
+  encoding: utf8
+  database: miner_front_development
+  pool: 5
+  timeout: 5000
+  username: root
+  password:
+  collation: utf8_bin
+
+test:
+  adapter: mysql2
+  encoding: utf8
+  database: miner_front_test
+  pool: 5
+  timeout: 5000
+  username: root
+  password:
+  collation: utf8_bin
+
+production:
+  adapter: mysql2
+  encoding: utf8
+  database: miner_front
+  pool: 5
+  timeout: 5000
+  username: root
+  password:
+  host: 127.0.0.1
+  socket: /var/run/mysqld-default/mysqld.sock
+  collation: utf8_bin
