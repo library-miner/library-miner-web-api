@@ -6,6 +6,8 @@ module Search
       page
       per_page
       dependency_projects
+      sort
+      order
     )
     attr_accessor(*ATTRIBUTES)
 
@@ -14,6 +16,8 @@ module Search
       self.page ||= 1
       self.per_page ||=25
       self.dependency_projects ||=[]
+      self.sort ||= "stargazers_count"
+      self.order ||= "desc"
     end
 
     def matches
@@ -30,6 +34,11 @@ module Search
       end
 
       results = results.page(page).per(per_page)
+
+      # sort
+      results = results.order(sort + " " + order)
+      results = results.order("github_updated_at desc")
+
       results
     end
 

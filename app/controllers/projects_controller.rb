@@ -42,9 +42,7 @@ class ProjectsController < ApplicationController
   # GET /project/search
   def search
     @project = Search::Project.new(search_params)
-    @projects = @project
-      .matches
-      .order(stargazers_count: :desc, github_updated_at: :desc)
+    @projects = @project.matches
 
     render json: [total_count: @projects.total_count,
                   total_page: @project.total_page(@projects.total_count) ,
