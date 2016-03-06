@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'recent_new_project/index'
+
   resources :projects do
     collection do
       get 'new_projects'

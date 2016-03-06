@@ -30,19 +30,11 @@
 #
 
 class ProjectsController < ApplicationController
-  before_action :set_project, only: [:show, :update, :destroy]
+  before_action :set_project, only: [:show]
 
   # GET /projects
   def index
     @projects = Project.all
-
-    render json: @projects
-  end
-
-  # GET /projects/new_projects
-  # 新着プロジェクト情報
-  def new_projects
-    @projects = Project.new_projects
 
     render json: @projects
   end
@@ -60,31 +52,6 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   def show
     render json: @project
-  end
-
-  # POST /projects
-  def create
-    @project = Project.new(project_params)
-
-    if @project.save
-      render json: @project, status: :created, location: @project
-    else
-      render json: @project.errors, status: :unprocessable_entity
-    end
-  end
-
-  # PATCH/PUT /projects/1
-  def update
-    if @project.update(project_params)
-      render json: @project
-    else
-      render json: @project.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /projects/1
-  def destroy
-    @project.destroy
   end
 
   private
