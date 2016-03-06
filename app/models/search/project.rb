@@ -18,24 +18,46 @@ module Search
 
     def matches
       projects = ::Project.arel_table
-      project_dependencies = ::ProjectDependency.arel_table
-
       results = ::Project.all
 
       results = results.where(contains(projects[:full_name], full_name)) if full_name.present?
       results = results.where(projects[:project_type_id].eq(project_type_id)) if project_type_id.present?
-      binding.pry
-      # 依存ライブラリ
-      dependency_projects.each do |d|
-        join_condition = projects.join(project_dependencies, Arel::Nodes::OuterJoin)
-          .on(projects[:id].eq(project_dependencies[:project_from_id]))
-          .join_sources
 
-        results = results.joins(join_condition)
-        results = results.where(project_dependencies[:project_from_id].eq(d[:id]))
+      # 検索条件のライブラリを全て使用しているプロジェクトを検索する
+      if dependency_projects.count > 0
+        target_projects = match_to_all_dependency_library(dependency_projects)
+        results = results.where(projects[:id].in(target_projects))
       end
 
       results = results.page(page).per(per_page)
+      results
+    end
+
+    # 引数のライブラリを全て利用しているプロジェクトを取得する
+    def match_to_all_dependency_library(libraries)
+      projects = []
+
+      # 候補を探す
+      libraries.each do |library|
+        p = ProjectDependency
+          .where(project_to_id: library[:id])
+          .distinct
+          .pluck(:project_from_id)
+        projects.push(p.to_a)
+      end
+
+      # 全ての条件に合致するプロジェクトを抽出する
+      results = []
+      first = true
+      projects.each do |project|
+        if first
+          results = project
+          first = false
+        else
+          results = results & project
+        end
+      end
+
       results
     end
 
