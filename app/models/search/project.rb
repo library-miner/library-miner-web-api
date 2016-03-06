@@ -9,6 +9,7 @@ module Search
     attr_accessor(*ATTRIBUTES)
 
     def initialize(attributes={})
+      super
       self.page ||= 1
       self.per_page ||=25
     end
