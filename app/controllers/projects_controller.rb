@@ -30,7 +30,7 @@
 #
 
 class ProjectsController < ApplicationController
-  before_action :set_project, only: [:show, :update, :destroy]
+  before_action :set_project, only: [:show]
 
   # GET /projects
   def index
@@ -39,52 +39,20 @@ class ProjectsController < ApplicationController
     render json: @projects
   end
 
-  # GET /projects/new_projects
-  # 新着プロジェクト情報
-  def new_projects
-    @projects = Project.new_projects
-
-    render json: @projects
-  end
-
   # GET /project/search
   def search
     @project = Search::Project.new(search_params)
-    @projects = @project
-      .matches
-      .order(stargazers_count: :desc, github_updated_at: :desc)
+    @projects = @project.matches
 
-    render json: @projects
+    render json: [total_count: @projects.total_count,
+                  total_page: @project.total_page(@projects.total_count) ,
+                  current_page: @project.page,
+                  items: @projects]
   end
 
   # GET /projects/1
   def show
     render json: @project
-  end
-
-  # POST /projects
-  def create
-    @project = Project.new(project_params)
-
-    if @project.save
-      render json: @project, status: :created, location: @project
-    else
-      render json: @project.errors, status: :unprocessable_entity
-    end
-  end
-
-  # PATCH/PUT /projects/1
-  def update
-    if @project.update(project_params)
-      render json: @project
-    else
-      render json: @project.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /projects/1
-  def destroy
-    @project.destroy
   end
 
   private
@@ -101,6 +69,6 @@ class ProjectsController < ApplicationController
     def search_params
       params
         .require(:search_project)
-        .permit(Search::Project::ATTRIBUTES)
+        .permit(Search::Project::ATTRIBUTES,:dependency_projects => [:id])
     end
 end
