@@ -3,7 +3,6 @@ Rails.application.routes.draw do
 
   resources :projects do
     collection do
-      get 'new_projects'
       get 'search'
     end
   end
