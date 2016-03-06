@@ -8,6 +8,11 @@ module Search
     )
     attr_accessor(*ATTRIBUTES)
 
+    def initialize(attributes={})
+      self.page ||= 1
+      self.per_page ||=25
+    end
+
     def matches
       t = ::Project.arel_table
       results = ::Project.all
@@ -17,5 +22,14 @@ module Search
       results = results.page(page).per(per_page)
       results
     end
+
+    def total_page(total_count)
+      total_page = 0
+      if total_count > 0
+        total_page = 1 + (total_count / per_page).to_i
+      end
+      total_page
+    end
+
   end
 end

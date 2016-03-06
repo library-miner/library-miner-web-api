@@ -46,7 +46,10 @@ class ProjectsController < ApplicationController
       .matches
       .order(stargazers_count: :desc, github_updated_at: :desc)
 
-    render json: [total_count: @projects.total_count,items: @projects]
+    render json: [total_count: @projects.total_count,
+                  total_page: @project.total_page(@projects.total_count) ,
+                  current_page: @project.page,
+                  items: @projects]
   end
 
   # GET /projects/1
