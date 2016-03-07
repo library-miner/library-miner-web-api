@@ -44,10 +44,10 @@ class ProjectsController < ApplicationController
     @project = Search::Project.new(search_params)
     @projects = @project.matches
 
-    render json: [total_count: @projects.total_count,
+    render json: {total_count: @projects.total_count,
                   total_page: @project.total_page(@projects.total_count) ,
                   current_page: @project.page,
-                  items: @projects]
+                  items: @projects}
   end
 
   # GET /projects/1
