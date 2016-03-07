@@ -32,43 +32,41 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: [:show]
 
-  # GET /projects
   def index
     @projects = Project.all
 
     render json: @projects
   end
 
-  # GET /project/search
   def search
     @project = Search::Project.new(search_params)
     @projects = @project.matches
 
-    render json: {total_count: @projects.total_count,
-                  total_page: @project.total_page(@projects.total_count) ,
-                  current_page: @project.page,
-                  items: @projects}
+    render json: {
+      total_count: @projects.total_count,
+      total_page: @project.total_page(@projects.total_count) ,
+      current_page: @project.page,
+      items: @projects
+    }
   end
 
-  # GET /projects/1
   def show
     render json: @project
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_project
-      @project = Project.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def project_params
-      params.fetch(:project, {})
-    end
+  def set_project
+    @project = Project.find(params[:id])
+  end
 
-    def search_params
-      params
-        .require(:search_project)
-        .permit(Search::Project::ATTRIBUTES,:dependency_projects => [:id])
-    end
+  def project_params
+    params.fetch(:project, {})
+  end
+
+  def search_params
+    params
+      .require(:search_project)
+      .permit(Search::Project::ATTRIBUTES, dependency_projects: [:id])
+  end
 end
