@@ -66,7 +66,6 @@ class ProjectsController < ApplicationController
 
   def search_params
     params
-      .require(:search_project)
       .permit(Search::Project::ATTRIBUTES, dependency_projects: [:id])
   end
 end
