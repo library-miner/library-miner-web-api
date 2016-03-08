@@ -20,7 +20,6 @@ class MinerProjectResponse
                 else
                   []
                 end
-
     end
   end
 end

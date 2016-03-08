@@ -30,7 +30,7 @@
 #
 
 class Project < ApplicationRecord
- extend ActiveHash::Associations::ActiveRecordExtensions
+  extend ActiveHash::Associations::ActiveRecordExtensions
   # Relations
   belongs_to_active_hash :project_type
   has_many :project_dependencies, foreign_key: :project_from_id, dependent: :destroy

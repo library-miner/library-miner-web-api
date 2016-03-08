@@ -1,8 +1,8 @@
 require 'dotenv'
 class MinerClient
-  MINER_PROJECT_EXPORT_URL = 'api/project_export'
-  MINER_PROJECT_READY_URL = 'api/project_export/export_ready'
-  MINER_PROJECT_END_URL = 'api/project_export/export_end'
+  MINER_PROJECT_EXPORT_URL = 'api/project_export'.freeze
+  MINER_PROJECT_READY_URL = 'api/project_export/export_ready'.freeze
+  MINER_PROJECT_END_URL = 'api/project_export/export_end'.freeze
 
   # Miner より Webデータ連携準備
   def import_ready(count: 100)
@@ -14,7 +14,7 @@ class MinerClient
 
   # Miner より データ取得
   def import_project(page: 1)
-    path = "#{MINER_PROJECT_EXPORT_URL}"
+    path = MINER_PROJECT_EXPORT_URL.to_s
     Rails.logger.info("MinerClient Access to #{path} - project import page:" + page.to_s)
 
     MinerProjectResponse.parse(get_request_to(path, page: page))
@@ -22,7 +22,7 @@ class MinerClient
 
   # Miner に Web連携完了通知
   def import_end
-    path = "#{MINER_PROJECT_END_URL}"
+    path = MINER_PROJECT_END_URL.to_s
     Rails.logger.info("MinerClient Access to #{path} - project end")
 
     MinerProjectResponse.parse(get_request_to(path))
@@ -43,5 +43,4 @@ class MinerClient
       req.url path, page: page
     end
   end
-
 end

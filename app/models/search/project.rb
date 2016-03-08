@@ -8,16 +8,16 @@ module Search
       dependency_projects
       sort
       order
-    )
+    ).freeze
     attr_accessor(*ATTRIBUTES)
 
-    def initialize(attributes={})
+    def initialize(attributes = {})
       super
       self.page ||= 1
-      self.per_page ||=25
-      self.dependency_projects ||=[]
-      self.sort ||= "stargazers_count"
-      self.order ||= "desc"
+      self.per_page ||= 25
+      self.dependency_projects ||= []
+      self.sort ||= 'stargazers_count'
+      self.order ||= 'desc'
     end
 
     def matches
@@ -36,8 +36,8 @@ module Search
       results = results.page(page).per(per_page)
 
       # sort
-      results = results.order(sort + " " + order)
-      results = results.order("github_updated_at desc")
+      results = results.order(sort + ' ' + order)
+      results = results.order('github_updated_at desc')
 
       results
     end
@@ -49,9 +49,9 @@ module Search
       # 候補を探す
       libraries.each do |library|
         p = ProjectDependency
-          .where(project_to_id: library[:id])
-          .distinct
-          .pluck(:project_from_id)
+            .where(project_to_id: library[:id])
+            .distinct
+            .pluck(:project_from_id)
         projects.push(p.to_a)
       end
 
@@ -63,7 +63,7 @@ module Search
           results = project
           first = false
         else
-          results = results & project
+          results &= project
         end
       end
 
@@ -77,6 +77,5 @@ module Search
       end
       total_page
     end
-
   end
 end

@@ -1,5 +1,5 @@
 class Jobs::ImportProject
-  def execute(count: 10000)
+  def execute(count: 10_000)
     Rails.logger.info('Import Project Start')
 
     # Project 連携準備
@@ -25,7 +25,7 @@ class Jobs::ImportProject
     total_count = response.total_count.to_i
     total_page = response.total_page.to_i
 
-    [total_count,total_page]
+    [total_count, total_page]
   end
 
   # Project 連携
