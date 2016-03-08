@@ -73,7 +73,7 @@ module Search
     def total_page(total_count)
       total_page = 0
       if total_count > 0
-        total_page = 1 + (total_count / per_page).to_i
+        total_page = 1 + (total_count / per_page.to_i).to_i
       end
       total_page
     end
