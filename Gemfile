@@ -17,10 +17,10 @@ gem 'rails-i18n'
 gem 'active_model_serializers'
 gem 'kaminari'
 
-#環境設定
+# 環境設定
 gem 'dotenv-rails'
-#クロスドメイン
-gem 'rack-cors', :require => 'rack/cors'
+# クロスドメイン
+gem 'rack-cors', require: 'rack/cors'
 
 group :development, :test do
   gem 'pry'
@@ -51,4 +51,3 @@ group :test do
   gem 'simplecov', require: false
   gem 'webmock'
 end
-

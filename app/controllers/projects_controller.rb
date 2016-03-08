@@ -44,7 +44,7 @@ class ProjectsController < ApplicationController
 
     render json: {
       total_count: @projects.total_count,
-      total_page: @project.total_page(@projects.total_count) ,
+      total_page: @project.total_page(@projects.total_count),
       current_page: @project.page,
       items: @projects
     }
