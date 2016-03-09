@@ -31,4 +31,5 @@
 
 class ProjectSerializer < ActiveModel::Serializer
   attributes :id, :is_incomplete
+  #has_many :project_readmes
 end
