@@ -22,17 +22,22 @@ module Search
 
     def matches
       projects = ::Project.arel_table
-      results = ::Project.all
 
+      #binding.pry
+      # join 条件
+      # 検索条件のライブラリを全て使用しているプロジェクトを検索する
+      join_condition = nil
+      if dependency_projects.count > 0
+        join_condition = match_to_all_dependency_library(projects, dependency_projects)
+      end
+
+      results = ::Project.joins(join_condition).all
+
+      # Where 条件
       results = results.where(contains(projects[:full_name], full_name)) if full_name.present?
       results = results.where(projects[:project_type_id].eq(project_type_id)) if project_type_id.present?
 
-      # 検索条件のライブラリを全て使用しているプロジェクトを検索する
-      if dependency_projects.count > 0
-        target_projects = match_to_all_dependency_library(dependency_projects)
-        results = results.where(projects[:id].in(target_projects))
-      end
-
+      # 件数制限
       results = results.page(page).per(per_page)
 
       # sort
@@ -43,31 +48,22 @@ module Search
     end
 
     # 引数のライブラリを全て利用しているプロジェクトを取得する
-    def match_to_all_dependency_library(libraries)
-      projects = []
-
-      # 候補を探す
-      libraries.each do |library|
-        p = ProjectDependency
-            .where(project_to_id: library[:id])
-            .distinct
-            .pluck(:project_from_id)
-        projects.push(p.to_a)
-      end
-
-      # 全ての条件に合致するプロジェクトを抽出する
-      results = []
-      first = true
-      projects.each do |project|
-        if first
-          results = project
-          first = false
-        else
-          results &= project
+    def match_to_all_dependency_library(projects, libraries)
+      join_conditions = []
+      libraries.each_with_index do |library, i|
+        # FIXME 暫定的に同時検索上限数をもうける
+        if i < 10
+          p_d = ::ProjectDependency.arel_table.alias(i.to_s)
+          join_condition = projects
+            .join(p_d, Arel::Nodes::InnerJoin)
+            .on(p_d[:project_from_id].eq(projects[:id])
+            .and(p_d[:project_to_id].eq(library[:id])))
+            .join_sources
+          join_conditions.push(join_condition)
         end
       end
 
-      results
+      join_conditions
     end
 
     def total_page(total_count)
