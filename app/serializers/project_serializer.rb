@@ -30,6 +30,7 @@
 #
 
 class ProjectSerializer < ActiveModel::Serializer
-  attributes :id, :is_incomplete
-  #has_many :project_readmes
+  attributes(*Project.attribute_names.map(&:to_sym))
+  has_many :project_readmes
+  has_many :project_dependencies
 end
