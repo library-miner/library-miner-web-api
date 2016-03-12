@@ -60,15 +60,15 @@ class Project < ApplicationRecord
     Project.completed
            .type_project
            .limit(10)
-           .order(github_updated_at: :desc)
+           .order(github_created_at: :desc)
   end
 
   # 新着ライブラリ一覧
-  def self.recent_created_projects
+  def self.recent_created_libraries
     Project.completed
            .type_library
            .limit(10)
-           .order(github_updated_at: :desc)
+           .order(github_created_at: :desc)
   end
 
   # 更新プロジェクト一覧
@@ -81,7 +81,7 @@ class Project < ApplicationRecord
   end
 
   # 更新ライブラリ一覧
-  def self.recent_updated_projects
+  def self.recent_updated_libraries
     Project.completed
            .type_library
            .limit(10)
