@@ -57,7 +57,7 @@ module Search
       dependency_project_limit = 10
 
       library_ids.take(dependency_project_limit).each do |library_id|
-        p_d = ::ProjectDependency.arel_table.alias(i.to_s)
+        p_d = ::ProjectDependency.arel_table.alias("project_#{library_id}")
         join_condition = project
                          .join(p_d, Arel::Nodes::InnerJoin)
                          .on(p_d[:project_from_id].eq(project[:id])
