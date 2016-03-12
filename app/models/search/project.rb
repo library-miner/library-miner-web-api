@@ -23,7 +23,6 @@ module Search
     def matches
       projects = ::Project.arel_table
 
-      #binding.pry
       # join 条件
       # 検索条件のライブラリを全て使用しているプロジェクトを検索する
       join_condition = nil
@@ -51,16 +50,15 @@ module Search
     def match_to_all_dependency_library(projects, libraries)
       join_conditions = []
       libraries.each_with_index do |library, i|
-        # FIXME 暫定的に同時検索上限数をもうける
-        if i < 10
-          p_d = ::ProjectDependency.arel_table.alias(i.to_s)
-          join_condition = projects
-            .join(p_d, Arel::Nodes::InnerJoin)
-            .on(p_d[:project_from_id].eq(projects[:id])
-            .and(p_d[:project_to_id].eq(library[:id])))
-            .join_sources
-          join_conditions.push(join_condition)
-        end
+        # FIXME: 暫定的に同時検索上限数をもうける
+        next unless i < 10
+        p_d = ::ProjectDependency.arel_table.alias(i.to_s)
+        join_condition = projects
+                         .join(p_d, Arel::Nodes::InnerJoin)
+                         .on(p_d[:project_from_id].eq(projects[:id])
+                         .and(p_d[:project_to_id].eq(library[:id])))
+                         .join_sources
+        join_conditions.push(join_condition)
       end
 
       join_conditions

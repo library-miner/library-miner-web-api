@@ -46,9 +46,61 @@ class Project < ApplicationRecord
     where(is_incomplete: false)
   end
 
+  scope :type_project, -> do
+    where(project_type_id: ProjectType::PROJECT.id)
+  end
+
+  scope :type_library, -> do
+    where(project_type_id: ProjectType::RUBYGEM.id)
+  end
+
   # 新着プロジェクト一覧
   # プロジェクト情報は完全なもののみ表示する
-  def self.recent_new_projects
-    Project.completed.limit(10).order(github_updated_at: :desc)
+  def self.recent_created_projects
+    Project.completed
+           .type_project
+           .limit(10)
+           .order(github_created_at: :desc)
+  end
+
+  # 新着ライブラリ一覧
+  def self.recent_created_libraries
+    Project.completed
+           .type_library
+           .limit(10)
+           .order(github_created_at: :desc)
+  end
+
+  # 更新プロジェクト一覧
+  # 更新とは最近コミットされたことを差し、スター数などが変化した場合を含まない
+  def self.recent_updated_projects
+    Project.completed
+           .type_project
+           .limit(10)
+           .order(github_pushed_at: :desc)
+  end
+
+  # 更新ライブラリ一覧
+  def self.recent_updated_libraries
+    Project.completed
+           .type_library
+           .limit(10)
+           .order(github_pushed_at: :desc)
+  end
+
+  # 人気のプロジェクト一覧
+  def self.popular_projects
+    Project.completed
+           .type_project
+           .limit(10)
+           .order(stargazers_count: :desc)
+  end
+
+  # 人気のライブラリ一覧
+  def self.popular_libraries
+    Project.completed
+           .type_library
+           .limit(10)
+           .order(stargazers_count: :desc)
   end
 end
