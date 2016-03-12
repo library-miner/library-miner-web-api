@@ -52,9 +52,11 @@ module Search
     # 引数のライブラリを全て利用しているプロジェクトを取得する
     def match_to_all_dependency_library(project, library_ids)
       join_conditions = []
-      library_ids.each_with_index do |library_id, i|
-        # FIXME: 暫定的に同時検索上限数をもうける
-        next unless i < 10
+
+      # FIXME: 暫定的に同時検索上限数をもうける
+      dependency_project_limit = 10
+
+      library_ids.take(dependency_project_limit).each do |library_id|
         p_d = ::ProjectDependency.arel_table.alias(i.to_s)
         join_condition = project
                          .join(p_d, Arel::Nodes::InnerJoin)
