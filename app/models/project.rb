@@ -63,6 +63,31 @@ class Project < ApplicationRecord
            .order(github_updated_at: :desc)
   end
 
+  # 新着ライブラリ一覧
+  def self.recent_created_projects
+    Project.completed
+           .type_library
+           .limit(10)
+           .order(github_updated_at: :desc)
+  end
+
+  # 更新プロジェクト一覧
+  # 更新とは最近コミットされたことを差し、スター数などが変化した場合を含まない
+  def self.recent_updated_projects
+    Project.completed
+           .type_project
+           .limit(10)
+           .order(github_pushed_at: :desc)
+  end
+
+  # 更新ライブラリ一覧
+  def self.recent_updated_projects
+    Project.completed
+           .type_library
+           .limit(10)
+           .order(github_pushed_at: :desc)
+  end
+
   # 人気のプロジェクト一覧
   def self.popular_projects
     Project.completed
