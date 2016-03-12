@@ -56,8 +56,11 @@ class Project < ApplicationRecord
 
   # 新着プロジェクト一覧
   # プロジェクト情報は完全なもののみ表示する
-  def self.recent_new_projects
-    Project.completed.limit(10).order(github_updated_at: :desc)
+  def self.recent_created_projects
+    Project.completed
+           .type_project
+           .limit(10)
+           .order(github_updated_at: :desc)
   end
 
   # 人気のプロジェクト一覧

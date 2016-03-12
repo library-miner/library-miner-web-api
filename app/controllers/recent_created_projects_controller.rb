@@ -1,7 +1,7 @@
 # 新着プロジェクト
 class RecentCreatedProjectsController < ApplicationController
   def index
-    @projects = Project.recent_new_projects
+    @projects = Project.recent_created_projects
 
     render json: {
       total_count: @projects.count,
