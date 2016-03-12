@@ -30,6 +30,7 @@
 #
 
 class ProjectsController < ApplicationController
+  include ActionController::Serialization
   before_action :set_project, only: [:show]
 
   def index
@@ -41,12 +42,13 @@ class ProjectsController < ApplicationController
   def search
     @project = Search::Project.new(search_params)
     @projects = @project.matches
+    serialization = ActiveModel::ArraySerializer.new(@projects).as_json
 
     render json: {
       total_count: @projects.total_count,
       total_page: @project.total_page(@projects.total_count),
       current_page: @project.page,
-      items: @projects
+      items: serialization
     }
   end
 
