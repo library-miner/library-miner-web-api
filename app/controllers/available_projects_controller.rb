@@ -1,7 +1,7 @@
 class AvailableProjectsController < ApplicationController
   def index
-    @ruby_projects = Project.where(project_type_id: ProjectType::PROJECT.id).count
-    @ruby_libraries = Project.where(project_type_id: ProjectType::RUBYGEM.id).count
+    @ruby_projects = Project.type_project.count
+    @ruby_libraries = Project.type_library.count
 
     render json: {
       "items": [{
