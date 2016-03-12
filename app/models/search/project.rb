@@ -29,7 +29,7 @@ module Search
       # join 条件
       # 検索条件のライブラリを全て使用しているプロジェクトを検索する
       join_condition = nil
-      if dependency_project_ids.count > 0
+      if dependency_project_ids.present?
         join_condition = match_to_all_dependency_library(project, dependency_project_ids)
       end
 
