@@ -63,17 +63,16 @@ class Project < ApplicationRecord
   # 人気のプロジェクト一覧
   def self.popular_projects
     Project.completed
-      .type_project
-      .limit(10)
-      .order(stargazers_count: :desc)
+           .type_project
+           .limit(10)
+           .order(stargazers_count: :desc)
   end
 
   # 人気のライブラリ一覧
   def self.popular_libraries
     Project.completed
-      .type_library
-      .limit(10)
-      .order(stargazers_count: :desc)
+           .type_library
+           .limit(10)
+           .order(stargazers_count: :desc)
   end
-
 end

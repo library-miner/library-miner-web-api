@@ -5,7 +5,7 @@ class AvailableProjectsController < ApplicationController
 
     render json: {
       "items": [{
-        project_language: "Ruby",
+        project_language: 'Ruby',
         projects_count: @ruby_projects,
         library_count: @ruby_libraries
       }]
