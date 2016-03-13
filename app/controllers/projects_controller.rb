@@ -68,6 +68,6 @@ class ProjectsController < ApplicationController
 
   def search_params
     params
-      .permit(Search::Project::ATTRIBUTES, dependency_projects: [:id])
+      .permit(Search::Project::ATTRIBUTES, dependency_project_ids: [])
   end
 end
