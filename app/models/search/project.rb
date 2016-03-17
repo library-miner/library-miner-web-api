@@ -38,6 +38,7 @@ module Search
       # Where 条件
       results = results.where(contains(project[:full_name], full_name)) if full_name.present?
       results = results.where(project[:project_type_id].eq(project_type_id)) if project_type_id.present?
+      results = results.completed
 
       # 件数制限
       results = results.page(page).per(per_page)
