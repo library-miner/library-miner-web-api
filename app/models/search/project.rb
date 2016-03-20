@@ -43,7 +43,10 @@ module Search
 
       # Where 条件
       results = results.project_using_projects(using_project_id) if using_project_id.present?
-      results = results.where(contains(project[:full_name], full_name)) if full_name.present?
+      # 名前がスペース区切りで複数きた場合はAND検索とする
+      division_at_space_delimiter(full_name).each do |n|
+        results = results.where(contains(project[:full_name], n))
+      end
       results = results.where(project[:project_type_id].eq(project_type_id)) if project_type_id.present?
       results = results.completed
 
@@ -95,6 +98,18 @@ module Search
       else
         ""
       end
+    end
+
+    # スペース区切り
+    def division_at_space_delimiter(targets)
+      results = []
+      if targets.present?
+        # 全角除去
+        results = targets.gsub('　',' ')
+        # 半角スペースで区切る
+        results = results.split(/\s+/)
+      end
+      results
     end
   end
 end
