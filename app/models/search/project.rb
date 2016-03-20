@@ -6,6 +6,7 @@ module Search
       page
       per_page
       dependency_project_ids
+      using_project_id
       sort
       order
     ).freeze
@@ -36,6 +37,7 @@ module Search
       results = ::Project.joins(join_condition).all
 
       # Where 条件
+      results = results.project_using_projects(using_project_id) if using_project_id.present?
       results = results.where(contains(project[:full_name], full_name)) if full_name.present?
       results = results.where(project[:project_type_id].eq(project_type_id)) if project_type_id.present?
       results = results.completed
