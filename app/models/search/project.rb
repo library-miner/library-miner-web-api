@@ -25,7 +25,7 @@ module Search
         self.dependency_project_ids = dependency_project_ids.split(",")
       end
       self.dependency_project_ids ||= []
-      self.sort ||= 'stargazers_count asc'
+      self.sort ||= 'stargazers_count desc'
       self.sort = filter_sort_params(self.sort)
     end
 
