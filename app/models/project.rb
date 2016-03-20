@@ -54,6 +54,14 @@ class Project < ApplicationRecord
     where(project_type_id: ProjectType::RUBYGEM.id)
   end
 
+  # 指定したプロジェクトが利用しているプロジェクトを返す
+  scope :project_using_projects, -> (project_id) do
+    ids = ProjectDependency
+      .where(project_from_id: project_id)
+      .pluck(:project_to_id)
+    where(id: ids)
+  end
+
   # 新着プロジェクト一覧
   # プロジェクト情報は完全なもののみ表示する
   def self.recent_created_projects
