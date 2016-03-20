@@ -8,7 +8,6 @@ module Search
       dependency_project_ids
       using_project_id
       sort
-      order
     ).freeze
     attr_accessor(*ATTRIBUTES)
 
@@ -20,8 +19,7 @@ module Search
         self.dependency_project_ids = dependency_project_ids.split(",")
       end
       self.dependency_project_ids ||= []
-      self.sort ||= 'stargazers_count'
-      self.order ||= 'desc'
+      self.sort ||= 'stargazers_count asc'
     end
 
     def matches
@@ -46,7 +44,7 @@ module Search
       results = results.page(page).per(per_page)
 
       # sort
-      results = results.order(sort + ' ' + order)
+      results = results.order(sort)
       results = results.order('github_updated_at desc')
 
       results
