@@ -43,7 +43,16 @@ module Search
 
       # Where 条件
       results = results.project_using_projects(using_project_id) if using_project_id.present?
-      results = results.where(contains(project[:full_name], full_name)) if full_name.present?
+      # 名前がスペース区切りで複数きた場合はAND検索とする
+      if full_name.present?
+        # 全角除去
+        names = full_name.gsub('　',' ')
+        # 半角スペースで区切る
+        names = full_name.split(/\s+/)
+        names.each do |n|
+          results = results.where(contains(project[:full_name], n))
+        end
+      end
       results = results.where(project[:project_type_id].eq(project_type_id)) if project_type_id.present?
       results = results.completed
 
@@ -95,6 +104,11 @@ module Search
       else
         ""
       end
+    end
+
+    # 名前についてスペース区切りで複数の場合はAND検索
+    def search_condition_full_name(results, full_name)
+      results = results.where(contains(project[:full_name], full_name)) if full_name.present?
     end
   end
 end
