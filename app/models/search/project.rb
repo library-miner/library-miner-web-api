@@ -11,6 +11,12 @@ module Search
     ).freeze
     attr_accessor(*ATTRIBUTES)
 
+    SORTABLE_ATTRIBUTES = %i(
+      id
+      github_updated_at
+      stargazers_count
+    )
+
     def initialize(attributes = {})
       super
       self.page ||= 1
@@ -20,6 +26,7 @@ module Search
       end
       self.dependency_project_ids ||= []
       self.sort ||= 'stargazers_count asc'
+      self.sort = filter_sort_params(self.sort)
     end
 
     def matches
@@ -44,7 +51,7 @@ module Search
       results = results.page(page).per(per_page)
 
       # sort
-      results = results.order(sort)
+      results = results.order(::Project.send(:sanitize_sql, sort)) if sort.present?
       results = results.order('github_updated_at desc')
 
       results
@@ -76,6 +83,18 @@ module Search
         total_page = 1 + (total_count / per_page.to_i).to_i
       end
       total_page
+    end
+
+    private
+
+    def filter_sort_params(sort)
+      column, ascdesc = sort.split(" ")
+      ascdesc ||= "desc"
+      if SORTABLE_ATTRIBUTES.any? { |v| v.to_s == column }
+        "#{column} #{ascdesc}"
+      else
+        ""
+      end
     end
   end
 end
