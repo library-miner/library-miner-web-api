@@ -1,8 +1,9 @@
 class MarkdownParser
-  def markdown(text)
-    renderer = Redcarpet::Render::HTML.new
-    markdown = Redcarpet::Markdown.new(renderer)
+  def self.markdown(text)
+    if text.present?
+      markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
 
-    markdown.render(text).html_safe
+      markdown.render(text).html_safe
+    end
   end
 end
