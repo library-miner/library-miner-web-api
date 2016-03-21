@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   resources :popular_projects, only: [:index]
   resources :popular_libraries, only: [:index]
 
-  resources :projects, only:[:index, :show] do
+  resources :projects, only:[:show] do
     collection do
       get 'search'
     end
