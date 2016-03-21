@@ -33,12 +33,6 @@ class ProjectsController < ApplicationController
   include ActionController::Serialization
   before_action :set_project, only: [:show]
 
-  def index
-    @projects = Project.all
-
-    render json: @projects
-  end
-
   def search
     @project = Search::Project.new(search_params)
     @projects = @project.matches
