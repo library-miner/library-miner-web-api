@@ -16,6 +16,10 @@ gem 'faraday'
 gem 'rails-i18n'
 gem 'active_model_serializers'
 gem 'kaminari'
+gem 'unicorn'
+
+# Markdown
+gem 'redcarpet'
 
 # 環境設定
 gem 'dotenv-rails'

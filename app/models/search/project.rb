@@ -6,10 +6,16 @@ module Search
       page
       per_page
       dependency_project_ids
+      using_project_id
       sort
-      order
     ).freeze
     attr_accessor(*ATTRIBUTES)
+
+    SORTABLE_ATTRIBUTES = %i(
+      id
+      github_updated_at
+      stargazers_count
+    )
 
     def initialize(attributes = {})
       super
@@ -19,8 +25,8 @@ module Search
         self.dependency_project_ids = dependency_project_ids.split(",")
       end
       self.dependency_project_ids ||= []
-      self.sort ||= 'stargazers_count'
-      self.order ||= 'desc'
+      self.sort ||= 'stargazers_count desc'
+      self.sort = filter_sort_params(self.sort)
     end
 
     def matches
@@ -36,14 +42,19 @@ module Search
       results = ::Project.joins(join_condition).all
 
       # Where 条件
-      results = results.where(contains(project[:full_name], full_name)) if full_name.present?
+      results = results.project_using_projects(using_project_id) if using_project_id.present?
+      # 名前がスペース区切りで複数きた場合はAND検索とする
+      division_at_space_delimiter(full_name).each do |n|
+        results = results.where(contains(project[:full_name], n))
+      end
       results = results.where(project[:project_type_id].eq(project_type_id)) if project_type_id.present?
+      results = results.completed
 
       # 件数制限
       results = results.page(page).per(per_page)
 
       # sort
-      results = results.order(sort + ' ' + order)
+      results = results.order(::Project.send(:sanitize_sql, sort)) if sort.present?
       results = results.order('github_updated_at desc')
 
       results
@@ -75,6 +86,30 @@ module Search
         total_page = 1 + (total_count / per_page.to_i).to_i
       end
       total_page
+    end
+
+    private
+
+    def filter_sort_params(sort)
+      column, ascdesc = sort.split(" ")
+      ascdesc ||= "desc"
+      if SORTABLE_ATTRIBUTES.any? { |v| v.to_s == column }
+        "#{column} #{ascdesc}"
+      else
+        ""
+      end
+    end
+
+    # スペース区切り
+    def division_at_space_delimiter(targets)
+      results = []
+      if targets.present?
+        # 全角除去
+        results = targets.gsub('　',' ')
+        # 半角スペースで区切る
+        results = results.split(/\s+/)
+      end
+      results
     end
   end
 end
