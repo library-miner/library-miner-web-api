@@ -39,6 +39,7 @@ create_table 'project_dependencies', collate: 'utf8_bin', comment: "プロジェ
   t.varchar :library_name
 
   t.index :project_from_id
+  t.index [:project_from_id, :project_to_id]
 
   t.datetime :created_at
   t.datetime :updated_at
