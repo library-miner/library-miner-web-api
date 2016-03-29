@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.string   "library_name",    null: false
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.index ["project_from_id", "project_to_id"], name: "index_project_dependencies_on_project_from_id_project_to_id", using: :btree
     t.index ["project_from_id"], name: "index_project_dependencies_on_project_from_id", using: :btree
   end
 
